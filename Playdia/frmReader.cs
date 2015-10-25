@@ -1,4 +1,12 @@
-﻿using System;
+﻿/*
+ * Created by SharpDevelop.
+ * User: I36107
+ * Date: 20/10/2015
+ * Time: 13:07
+ * 
+ * To change this template use Tools | Options | Coding | Edit Standard Headers.
+ */
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,6 +24,7 @@ namespace Playdia
     {
         ISO9660.Image discimg;
         int sectorPos;
+        PrimaryVolumeDescriptor pvd;
         public frmReader()
         {
             InitializeComponent();
@@ -23,27 +32,33 @@ namespace Playdia
             discimg = null;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void RefreshPVDInfo()
         {
-            if(openFileDialog1.ShowDialog()==DialogResult.OK)
-            {
-                discimg = new ISO9660.Image(openFileDialog1.FileName);
-                sectorPos = 0;
-                RefreshControls();
-            }
+        	txtVDType.Text = pvd.VolumeDescriptorType.ToString();
+        	txtStandardIdentifier.Text = pvd.StandardIdentifier;
+        	txtVDVersion.Text  =pvd.VolumeDescriptorVersion.ToString();
+        	txtSystemIdentifier.Text = pvd.SystemIdentifier;
+        	txtVolumeIdentifier.Text = pvd.VolumeIdentifier;
+        	txtVolumeSpace.Text = pvd.VolumeSpaceSize.ToString();
+        	txtVolumeSequence.Text = pvd.VolumeSequenceNumber.ToString();
+        	txtVolumeSet.Text = pvd.VolumeSetSize.ToString();
+        	txtLogicalBlockSize.Text = pvd.LogicalBlockSize.ToString();
+        	txtPathTableSize.Text = pvd.PathTableSize.ToString();
+        	txtPathTableLocation.Text = pvd.PathTableLocation.ToString();
+        	txtVolumeSetIdentifier.Text = pvd.VolumeSetIdentifier;
+        	txtVolumeCreationDate.Text = pvd.VolumeCreationDate.ToString();
         }
-
-        private void RefreshControls()
+        
+        private void RefreshSectorInfo()
         {
-            txtMinute.Text = discimg.Sectors[sectorPos].Minute.ToString();
-            txtSecond.Text = discimg.Sectors[sectorPos].Second.ToString();
-            txtBlock.Text = discimg.Sectors[sectorPos].Block.ToString();
-            txtMode.Text = discimg.Sectors[sectorPos].Mode.ToString();
-            txtSubHeader0.Text = discimg.Sectors[sectorPos].SubHeader1.ToString();
-            txtSubHeader1.Text = discimg.Sectors[sectorPos].SubHeader2.ToString();
-            txtData.Text = BitConverter.ToString(discimg.Sectors[sectorPos].Data).Replace('-', ' ');
-            lblSectorPos.Text = (sectorPos + 1).ToString();
-            lblNbSectors.Text = discimg.NbSectors.ToString();
+            txtMinute.Text = discimg[sectorPos].Minute.ToString();
+            txtSecond.Text = discimg[sectorPos].Second.ToString();
+            txtBlock.Text = discimg[sectorPos].Block.ToString();
+            txtMode.Text = discimg[sectorPos].Mode.ToString();
+            txtSubHeader0.Text = discimg[sectorPos].SubHeader1.ToString();
+            txtSubHeader1.Text = discimg[sectorPos].SubHeader2.ToString();
+            lblSectorPos.Text = (sectorPos).ToString();
+            lblNbSectors.Text = (discimg.NbSectors -1).ToString();
         }
 
         private void btnPrev_Click(object sender, EventArgs e)
@@ -52,7 +67,7 @@ namespace Playdia
                 sectorPos = discimg.NbSectors-1;
             else
                 sectorPos--;
-            RefreshControls();
+            RefreshSectorInfo();
         }
 
         private void btnNext_Click(object sender, EventArgs e)
@@ -61,8 +76,19 @@ namespace Playdia
                 sectorPos = 0;
             else
                 sectorPos++;
-            RefreshControls();
+            RefreshSectorInfo();
         }
-
+        
+		void OpenToolStripMenuItemClick(object sender, EventArgs e)
+		{
+            if(openFileDialog1.ShowDialog()==DialogResult.OK)
+            {
+                discimg = new ISO9660.Image(openFileDialog1.FileName);
+                pvd = discimg.ReadPVD();
+                RefreshPVDInfo();
+                sectorPos = 0;
+                RefreshSectorInfo();
+            }	
+		}
     }
 }

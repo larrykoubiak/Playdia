@@ -9,24 +9,32 @@ namespace ISO9660
 {
     public class Image
     {
-        private XASectorForm1[] sectors;
         private int intNbSectors;
         private FileStream fs;
 
         public Image()
         {
-            sectors = new XASectorForm1[0];
-            intNbSectors = 0;
             fs = null;
-        }
-        public Image(string path)
-        {
-            ReadFile(path);
+            intNbSectors = 0;
         }
 
-        public XASectorForm1[] Sectors
+        public Image(string path)
         {
-            get { return sectors; }
+            fs = new FileStream(path, FileMode.Open);
+            intNbSectors = (int)(fs.Length / 2352);
+        }
+
+        ~Image()
+        {
+            if (fs != null)
+            {
+                fs.Close();
+            }
+        }
+
+        public XASectorForm1 this[int index]
+        {
+            get { return ReadSector(index); }
         }
 
         public int NbSectors
@@ -34,19 +42,22 @@ namespace ISO9660
             get { return intNbSectors; }
         }
 
-        public void ReadFile(string path)
+        private XASectorForm1 ReadSector(int index)
         {
-            FileStream fs = new FileStream(path, FileMode.Open);
             byte[] buffer = new byte[2352];
-            intNbSectors = (int)(fs.Length / 2352);
-            sectors = new XASectorForm1[intNbSectors];
-            for(int pos=0;pos<intNbSectors;pos++)
-            {
-                sectors[pos] = new XASectorForm1();
-                fs.Read(buffer,0, 2352);
-                sectors[pos].ReadBytes(buffer);
-            }
-            fs.Close();
+            XASectorForm1 sector = new XASectorForm1();
+            fs.Seek(index * 2352, SeekOrigin.Begin);
+            fs.Read(buffer, 0, 2352);
+            sector.ReadBytes(buffer);
+            return sector;
+        }
+
+        public PrimaryVolumeDescriptor ReadPVD()
+        {
+            XASectorForm1 sector = ReadSector(16);
+            PrimaryVolumeDescriptor pvd = new PrimaryVolumeDescriptor();
+            pvd.ReadByte(sector.Data);
+            return pvd;
         }
     }
 }

@@ -7,41 +7,30 @@ using System.Runtime.InteropServices;
 
 namespace ISO9660
 {
-    [StructLayout(LayoutKind.Explicit, Size= 2352,Pack=1)]
+    [StructLayout(LayoutKind.Sequential, Size= 2352,Pack=1)]
     struct _XASectorForm1
     {
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst=12)]
-        [FieldOffset(0)]
         public string syncPattern;
         [MarshalAs(UnmanagedType.U1)]
-        [FieldOffset(12)]
         public byte minute;
         [MarshalAs(UnmanagedType.U1)]
-        [FieldOffset(13)]
         public byte second;
         [MarshalAs(UnmanagedType.U1)]
-        [FieldOffset(14)]
         public byte block;
         [MarshalAs(UnmanagedType.U1)]
-        [FieldOffset(15)]
         public byte mode;
         [MarshalAs(UnmanagedType.ByValArray,SizeConst=2)]
-        [FieldOffset(16)]
         public UInt32[] subheader;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst=2048)]
-        [FieldOffset(24)]
         public byte[] data;
         [MarshalAs(UnmanagedType.U4)]
-        [FieldOffset(2064)]
         public UInt32 EDC;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-        [FieldOffset(2068)]
         public byte[] Space;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 172)]
-        [FieldOffset(2076)]
         public byte[] ECCP;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 104)]
-        [FieldOffset(2248)]
         public byte[] ECCQ;
     }
     public class XASectorForm1
@@ -98,7 +87,7 @@ namespace ISO9660
             get { return _sector.EDC; }
             set { _sector.EDC = value; }
         }
-        public byte[] UnusedSapce
+        public byte[] UnusedSpace
         {
             get { return _sector.Space; }
             set { _sector.Space = value; }
