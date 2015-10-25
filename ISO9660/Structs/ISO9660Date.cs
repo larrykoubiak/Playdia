@@ -15,7 +15,7 @@ namespace ISO9660
 	/// Description of ISO9660Date.
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential,Size=17,Pack=1)]
-	public struct _ISO9660Date
+	public struct _ISO9660TextDate
 	{
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst=4)]
 		public char[] year;
@@ -34,4 +34,23 @@ namespace ISO9660
 		[MarshalAs(UnmanagedType.I1)]
 		public sbyte offset;
 	}	
+    [StructLayout(LayoutKind.Sequential,Size=7,Pack =1)]
+    public struct _ISO9660NumericDate
+    {
+        [MarshalAs(UnmanagedType.U1)]
+        public byte year;
+        [MarshalAs(UnmanagedType.U1)]
+        public byte month;
+        [MarshalAs(UnmanagedType.U1)]
+        public byte day;
+        [MarshalAs(UnmanagedType.U1)]
+        public byte hour;
+        [MarshalAs(UnmanagedType.U1)]
+        public byte minute;
+        [MarshalAs(UnmanagedType.U1)]
+        public byte second;
+        [MarshalAs(UnmanagedType.I1)]
+        public byte offset;
+    }
+
 }

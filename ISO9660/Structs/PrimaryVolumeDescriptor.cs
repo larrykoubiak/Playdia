@@ -58,8 +58,8 @@ namespace ISO9660
 		public UInt32 locationPathTableBE;
 		[MarshalAs(UnmanagedType.U4)]
 		public UInt32 locationOptionalPathTableBE;
-		[MarshalAs(UnmanagedType.ByValArray,SizeConst =34)]
-		public byte[] rootDirectoryRecord;
+		[MarshalAs(UnmanagedType.Struct,SizeConst =33)]
+		public _DirectoryRecord rootDirectoryRecord;
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst=128)]
 		public char[] volumeSetIdentifier;		
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst=128)]
@@ -75,13 +75,13 @@ namespace ISO9660
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst=37)]
 		public char[] bibliographicFileIdentifier;
 		[MarshalAs(UnmanagedType.Struct)]
-		public _ISO9660Date volumeCreationDateTime;
+		public _ISO9660TextDate volumeCreationDateTime;
 		[MarshalAs(UnmanagedType.Struct)]
-		public _ISO9660Date volumeModificationDateTime;
+		public _ISO9660TextDate volumeModificationDateTime;
 		[MarshalAs(UnmanagedType.Struct)]
-		public _ISO9660Date volumeExpirationDateTime;
+		public _ISO9660TextDate volumeExpirationDateTime;
 		[MarshalAs(UnmanagedType.Struct)]
-		public _ISO9660Date volumeEffectiveDateTime;
+		public _ISO9660TextDate volumeEffectiveDateTime;
 		[MarshalAs(UnmanagedType.U1)]
 		public byte fileStructureVersion;
 		[MarshalAs(UnmanagedType.U1)]
@@ -172,6 +172,12 @@ namespace ISO9660
 			set { pvd.locationOptionalPathTable = value;}
 		}
 		
+        public DirectoryRecord RootDirectoryRecord
+        {
+            get { return new DirectoryRecord(pvd.rootDirectoryRecord); }
+            set { pvd.rootDirectoryRecord = value.basestruct; }
+        }
+
 		public string VolumeSetIdentifier
 		{
 			get { return new String(pvd.volumeSetIdentifier);}
@@ -227,7 +233,7 @@ namespace ISO9660
 			handle.Free();
 		}
 		
-		private DateTime convertISODate2DateTime(_ISO9660Date isodate)
+		private DateTime convertISODate2DateTime(_ISO9660TextDate isodate)
 		{
 				return new DateTime(
 					int.Parse(new String(isodate.year)),
@@ -239,9 +245,9 @@ namespace ISO9660
 					int.Parse(new String(isodate.secondHundreth))*10
 				);
 		}
-		private _ISO9660Date convertDateTime2ISODate(DateTime value)
+		private _ISO9660TextDate convertDateTime2ISODate(DateTime value)
 		{
-			_ISO9660Date isodate = new _ISO9660Date();
+            _ISO9660TextDate isodate = new _ISO9660TextDate();
 			isodate.year = value.Year.ToString("0000").ToCharArray();
 			isodate.month = value.Month.ToString("00").ToCharArray();
 			isodate.day = value.Day.ToString("00").ToCharArray();

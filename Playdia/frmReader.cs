@@ -47,6 +47,17 @@ namespace Playdia
         	txtPathTableLocation.Text = pvd.PathTableLocation.ToString();
         	txtVolumeSetIdentifier.Text = pvd.VolumeSetIdentifier;
         	txtVolumeCreationDate.Text = pvd.VolumeCreationDate.ToString();
+            //Root direction info
+            txtDRLength.Text = pvd.RootDirectoryRecord.Length.ToString();
+            txtARLength.Text = pvd.RootDirectoryRecord.AttributeLength.ToString();
+            txtExtentLocation.Text = pvd.RootDirectoryRecord.ExtentLocation.ToString();
+            txtDataLength.Text = pvd.RootDirectoryRecord.DataLength.ToString();
+            txtRecordingDate.Text = pvd.RootDirectoryRecord.RecordingDate.ToString();
+            txtFileFlags.Text = pvd.RootDirectoryRecord.Flags.ToString();
+            txtFileUnitSize.Text = pvd.RootDirectoryRecord.FileUnitSize.ToString();
+            txtInterleaveGapSize.Text = pvd.RootDirectoryRecord.InterleaveGapSize.ToString();
+            txtVolumeSequenceNumber.Text = pvd.RootDirectoryRecord.VolumeSequenceNumber.ToString();
+            txtFileIdentifierLength.Text = pvd.RootDirectoryRecord.FileIdentifierLength.ToString();
         }
         
         private void RefreshSectorInfo()
