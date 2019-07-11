@@ -15,7 +15,7 @@ namespace ISO9660
 	struct _PrimaryVolumeDescriptor
 	{
 		[MarshalAs(UnmanagedType.U1)]
-		public byte volumeDescriptorType;
+		public SectorType volumeDescriptorType;
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst=5)]
 		public char[] standardIdentifier;
 		[MarshalAs(UnmanagedType.U1)]
@@ -94,31 +94,36 @@ namespace ISO9660
 	/// <summary>
 	/// Description of PrimaryVolumeDescriptor.
 	/// </summary>
-	public class PrimaryVolumeDescriptor
+	public class PrimaryVolumeDescriptor : VolumeDescriptor
 	{
 		private _PrimaryVolumeDescriptor pvd;
 		public PrimaryVolumeDescriptor()
 		{
 			pvd = new _PrimaryVolumeDescriptor();
 		}
-		
-		public byte VolumeDescriptorType 
-		{ 
-			get { return pvd.volumeDescriptorType; }
-			set { pvd.volumeDescriptorType = value; }
-		}
-		public string StandardIdentifier 
-		{ 
-			get { return new String(pvd.standardIdentifier);}
-			set { pvd.standardIdentifier = value.ToCharArray();}
-		}
-		public byte VolumeDescriptorVersion 
-		{ 
-			get { return pvd.volumeDescriptorVersion; }
-			set { pvd.volumeDescriptorVersion = value; }
-		}
-		
-		public string SystemIdentifier 
+		   
+        public PrimaryVolumeDescriptor(byte[] data) : this()
+        {
+            ReadByte(data);
+        }
+
+        public override SectorType VolumeDescriptorType
+        {
+            get { return pvd.volumeDescriptorType; }
+            set { pvd.volumeDescriptorType = value; }
+        }
+        public override string StandardIdentifier
+        {
+            get { return new String(pvd.standardIdentifier); }
+            set { pvd.standardIdentifier = value.ToCharArray(); }
+        }
+        public override byte VolumeDescriptorVersion
+        {
+            get { return pvd.volumeDescriptorVersion; }
+            set { pvd.volumeDescriptorVersion = value; }
+        }
+
+        public string SystemIdentifier 
 		{ 
 			get { return new String(pvd.systemIdentifier);}
 			set { pvd.systemIdentifier = value.ToCharArray();}
@@ -225,8 +230,26 @@ namespace ISO9660
 			get { return convertISODate2DateTime(pvd.volumeCreationDateTime);}
 			set { pvd.volumeCreationDateTime = convertDateTime2ISODate(value);}
 		}
-		
-		public void ReadByte(byte[] data)
+
+        public DateTime VolumeModificationdDate
+        {
+            get { return convertISODate2DateTime(pvd.volumeModificationDateTime); }
+            set { pvd.volumeModificationDateTime = convertDateTime2ISODate(value); }
+        }
+
+        public DateTime VolumeExpirationDate
+        {
+            get { return convertISODate2DateTime(pvd.volumeExpirationDateTime); }
+            set { pvd.volumeExpirationDateTime = convertDateTime2ISODate(value); }
+        }
+
+        public DateTime VolumeEffectiveDate
+        {
+            get { return convertISODate2DateTime(pvd.volumeEffectiveDateTime); }
+            set { pvd.volumeEffectiveDateTime = convertDateTime2ISODate(value); }
+        }
+
+        public override void ReadByte(byte[] data)
 		{
 			GCHandle handle = GCHandle.Alloc(data,GCHandleType.Pinned);
 			pvd = (_PrimaryVolumeDescriptor)Marshal.PtrToStructure(handle.AddrOfPinnedObject(),typeof(_PrimaryVolumeDescriptor));
@@ -235,6 +258,12 @@ namespace ISO9660
 		
 		private DateTime convertISODate2DateTime(_ISO9660TextDate isodate)
 		{
+            if(new String(isodate.year)=="0000")
+            {
+                return DateTime.MinValue;
+            }
+            else
+            {
 				return new DateTime(
 					int.Parse(new String(isodate.year)),
 					int.Parse(new String(isodate.month)),
@@ -244,7 +273,8 @@ namespace ISO9660
 					int.Parse(new String(isodate.second)),
 					int.Parse(new String(isodate.secondHundreth))*10
 				);
-		}
+            }
+        }
 		private _ISO9660TextDate convertDateTime2ISODate(DateTime value)
 		{
             _ISO9660TextDate isodate = new _ISO9660TextDate();

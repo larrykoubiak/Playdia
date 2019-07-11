@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Playdia</RootNamespace>
     <AssemblyName>Playdia</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -63,6 +64,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -81,6 +83,10 @@
     <ProjectReference Include="..\ISO9660\ISO9660.csproj">
       <Project>{bcb0cd91-0ed3-4e6e-a0f3-032b191ea51f}</Project>
       <Name>ISO9660</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PlaydiaControls\PlaydiaControls.csproj">
+      <Project>{89341d60-d2a1-4cb1-9c20-99e4e84afc51}</Project>
+      <Name>PlaydiaControls</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

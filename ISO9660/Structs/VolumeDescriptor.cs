@@ -12,14 +12,20 @@ using System.Text;
 
 namespace ISO9660
 {
-	/// <summary>
-	/// Description of VolumeDescriptor.
-	/// </summary>
-	[StructLayout(LayoutKind.Sequential, Size=2048,Pack=1)]
+    public enum SectorType : byte
+    {
+        Boot = 0,
+        PrimaryVolumeDescriptor = 1,
+        SupplementaryVolumeDescriptor = 2,
+        VolumePartitionDescriptor = 3,
+        VolumeDescriptionSetTerminator = 255
+    }
+
+    [StructLayout(LayoutKind.Sequential, Size=2048,Pack=1)]
 	struct _VolumeDescriptor
 	{
 		[MarshalAs(UnmanagedType.U1)]
-		public byte volumeDescriptorType;
+		public SectorType volumeDescriptorType;
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst=5)]
 		public char[] standardIdentifier;
 		[MarshalAs(UnmanagedType.U1)]
@@ -29,33 +35,37 @@ namespace ISO9660
 	}
 	
 	public class VolumeDescriptor
-	{	
-		private _VolumeDescriptor _volumeDescriptor;
+	{
+        _VolumeDescriptor _volumeDescriptor;
 		public VolumeDescriptor()
 		{
 			_volumeDescriptor = new _VolumeDescriptor();
 		}
-		public byte VolumeDescriptorType 
+        public VolumeDescriptor(byte[] data) : this()
+        {
+            ReadByte(data);
+        }
+		public virtual SectorType VolumeDescriptorType 
 		{ 
 			get { return _volumeDescriptor.volumeDescriptorType; }
 			set { _volumeDescriptor.volumeDescriptorType = value; }
 		}
-		public string StandardIdentifier 
+		public virtual string StandardIdentifier 
 		{ 
 			get { return new String(_volumeDescriptor.standardIdentifier);}
 			set { _volumeDescriptor.standardIdentifier = value.ToCharArray();}
 		}
-		public byte VolumeDescriptorVersion 
+		public virtual byte VolumeDescriptorVersion 
 		{ 
 			get { return _volumeDescriptor.volumeDescriptorVersion; }
 			set { _volumeDescriptor.volumeDescriptorVersion = value; }
 		}
-		public byte[] Data
+		public virtual byte[] Data
 		{
 			get { return _volumeDescriptor.data;}
 			set { _volumeDescriptor.data = value;}
 		}
-		public void ReadByte(byte[] data)
+		public virtual void ReadByte(byte[] data)
 		{
 			GCHandle handle = GCHandle.Alloc(data,GCHandleType.Pinned);
 			_volumeDescriptor = (_VolumeDescriptor)Marshal.PtrToStructure(handle.AddrOfPinnedObject(),typeof(_VolumeDescriptor));

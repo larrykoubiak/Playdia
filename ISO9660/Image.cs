@@ -11,25 +11,21 @@ namespace ISO9660
     {
         private int intNbSectors;
         private FileStream fs;
+        private List<VolumeDescriptor> volumeDescriptors;
 
         public Image()
         {
             fs = null;
             intNbSectors = 0;
+            volumeDescriptors = new List<VolumeDescriptor>();
         }
 
-        public Image(string path)
+        public Image(string path) : this()
         {
             fs = new FileStream(path, FileMode.Open);
             intNbSectors = (int)(fs.Length / 2352);
-        }
-
-        ~Image()
-        {
-            if (fs != null)
-            {
-                fs.Close();
-            }
+            readVolumeDescriptors();
+            fs.Close();
         }
 
         public XASectorForm1 this[int index]
@@ -42,6 +38,11 @@ namespace ISO9660
             get { return intNbSectors; }
         }
 
+        public List<VolumeDescriptor> VolumeDescriptors
+        {
+            get { return volumeDescriptors; }
+        }
+
         private XASectorForm1 ReadSector(int index)
         {
             byte[] buffer = new byte[2352];
@@ -52,12 +53,29 @@ namespace ISO9660
             return sector;
         }
 
-        public PrimaryVolumeDescriptor ReadPVD()
+        private void readVolumeDescriptors()
         {
-            XASectorForm1 sector = ReadSector(16);
-            PrimaryVolumeDescriptor pvd = new PrimaryVolumeDescriptor();
-            pvd.ReadByte(sector.Data);
-            return pvd;
+            XASectorForm1 sector;
+            VolumeDescriptor vd;
+            int sectorId = 16;
+            sector = ReadSector(sectorId);
+            vd = new VolumeDescriptor(sector.Data);
+            while(vd.VolumeDescriptorType!= SectorType.VolumeDescriptionSetTerminator)
+            {
+                switch(vd.VolumeDescriptorType)
+                {
+                    case SectorType.PrimaryVolumeDescriptor:
+                        PrimaryVolumeDescriptor pvd = new PrimaryVolumeDescriptor(sector.Data);
+                        volumeDescriptors.Add(pvd);
+                        break;
+                    default:
+                        break;
+                }
+                sectorId++;
+                sector = ReadSector(sectorId);
+                vd = new VolumeDescriptor(sector.Data);
+            }
+            volumeDescriptors.Add(vd);
         }
     }
 }
