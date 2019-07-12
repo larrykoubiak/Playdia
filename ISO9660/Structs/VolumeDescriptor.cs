@@ -12,7 +12,7 @@ using System.Text;
 
 namespace ISO9660
 {
-    public enum SectorType : byte
+    public enum VolumeDescriptorType : byte
     {
         Boot = 0,
         PrimaryVolumeDescriptor = 1,
@@ -25,7 +25,7 @@ namespace ISO9660
 	struct _VolumeDescriptor
 	{
 		[MarshalAs(UnmanagedType.U1)]
-		public SectorType volumeDescriptorType;
+		public VolumeDescriptorType volumeDescriptorType;
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst=5)]
 		public char[] standardIdentifier;
 		[MarshalAs(UnmanagedType.U1)]
@@ -45,7 +45,7 @@ namespace ISO9660
         {
             ReadByte(data);
         }
-		public virtual SectorType VolumeDescriptorType 
+		public virtual VolumeDescriptorType VolumeDescriptorType 
 		{ 
 			get { return _volumeDescriptor.volumeDescriptorType; }
 			set { _volumeDescriptor.volumeDescriptorType = value; }

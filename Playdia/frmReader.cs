@@ -62,15 +62,33 @@ namespace Playdia
                     TreeNode node = vdNode.Nodes.Add(vd.VolumeDescriptorType.ToString());
                     node.Tag = vd;
                 }
+                TreeNode drNode = tvSectors.Nodes["nodeDirectoryRecords"];
+                drNode.Tag = discimg.RootDirectory;
+                drNode.Nodes.Clear();
+                foreach(DirectoryRecord dr in discimg.RootDirectory.Children)
+                {
+                    TreeNode node = drNode.Nodes.Add(dr.FileIdentifier);
+                    node.Tag = dr;
+                }
             }
         }
 
         private void tvSectors_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            this.pnlPrimaryVolumeDescriptor.Controls.Clear();
-            VolumeDescriptor vd = (VolumeDescriptor)e.Node.Tag;
-            VolumeDescriptorControl pvdctl = new VolumeDescriptorControl(vd);
-            this.pnlPrimaryVolumeDescriptor.Controls.Add(pvdctl);
+            if(e.Node.Parent!=null && e.Node.Parent.Name=="nodeVolumeDescriptors")
+            {
+                this.pnlPrimaryVolumeDescriptor.Controls.Clear();
+                VolumeDescriptor vd = (VolumeDescriptor)e.Node.Tag;
+                VolumeDescriptorControl pvdctl = new VolumeDescriptorControl(vd);
+                this.pnlPrimaryVolumeDescriptor.Controls.Add(pvdctl);
+            }
+            else
+            {
+                this.pnlDirectoryRecord.Controls.Clear();
+                DirectoryRecord dr = (DirectoryRecord)e.Node.Tag;
+                DirectoryRecordControl drctl = new DirectoryRecordControl(dr);
+                this.pnlDirectoryRecord.Controls.Add(drctl);
+            }
         }
     }
 }

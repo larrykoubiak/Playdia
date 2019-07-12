@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 namespace ISO9660
 {
     [StructLayout(LayoutKind.Sequential, Size= 2352,Pack=1)]
-    struct _XASectorForm1
+    struct _XASectorForm2
     {
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst=12)]
         public string syncPattern;
@@ -22,24 +22,18 @@ namespace ISO9660
         public byte mode;
         [MarshalAs(UnmanagedType.ByValArray,SizeConst=2)]
         public UInt32[] subheader;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst=2048)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst=2324)]
         public byte[] data;
         [MarshalAs(UnmanagedType.U4)]
         public UInt32 EDC;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-        public byte[] Space;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 172)]
-        public byte[] ECCP;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 104)]
-        public byte[] ECCQ;
     }
-    public class XASectorForm1
+    public class XASectorForm2
     {
-        private _XASectorForm1 _sector;
+        private _XASectorForm2 _sector;
 
-        public XASectorForm1()
+        public XASectorForm2()
         {
-            _sector = new _XASectorForm1();
+            _sector = new _XASectorForm2();
         }
 
         public string SyncPattern
@@ -87,27 +81,12 @@ namespace ISO9660
             get { return _sector.EDC; }
             set { _sector.EDC = value; }
         }
-        public byte[] UnusedSpace
-        {
-            get { return _sector.Space; }
-            set { _sector.Space = value; }
-        }
-        public byte[] ECCP
-        {
-            get { return _sector.ECCP; }
-            set { _sector.ECCP = value;}
-        }
-        public byte[] ECCQ
-        {
-            get { return _sector.ECCQ; }
-            set { _sector.ECCQ = value; }
-        }
 
         public void ReadBytes(byte[] data)
         {
             GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            _sector = (_XASectorForm1)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(_XASectorForm1));
-            handle.Free();            
+            _sector = (_XASectorForm2)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(_XASectorForm2));
+            handle.Free();
         }
     }
  } 

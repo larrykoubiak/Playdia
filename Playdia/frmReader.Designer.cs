@@ -51,7 +51,7 @@ namespace Playdia
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tvSectors = new System.Windows.Forms.TreeView();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.pnlSector = new System.Windows.Forms.Panel();
+            this.pnlDirectoryRecord = new System.Windows.Forms.Panel();
             this.pnlPrimaryVolumeDescriptor = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -192,31 +192,31 @@ namespace Playdia
             // 
             this.tableLayoutPanel2.ColumnCount = 1;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Controls.Add(this.pnlSector, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.pnlDirectoryRecord, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.pnlPrimaryVolumeDescriptor, 0, 1);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 2;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 90F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 140F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(616, 492);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
-            // pnlSector
+            // pnlDirectoryRecord
             // 
-            this.pnlSector.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlSector.Location = new System.Drawing.Point(3, 3);
-            this.pnlSector.Name = "pnlSector";
-            this.pnlSector.Size = new System.Drawing.Size(610, 84);
-            this.pnlSector.TabIndex = 0;
+            this.pnlDirectoryRecord.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlDirectoryRecord.Location = new System.Drawing.Point(3, 3);
+            this.pnlDirectoryRecord.Name = "pnlDirectoryRecord";
+            this.pnlDirectoryRecord.Size = new System.Drawing.Size(610, 134);
+            this.pnlDirectoryRecord.TabIndex = 0;
             // 
             // pnlPrimaryVolumeDescriptor
             // 
             this.pnlPrimaryVolumeDescriptor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlPrimaryVolumeDescriptor.Location = new System.Drawing.Point(3, 93);
+            this.pnlPrimaryVolumeDescriptor.Location = new System.Drawing.Point(3, 143);
             this.pnlPrimaryVolumeDescriptor.Name = "pnlPrimaryVolumeDescriptor";
-            this.pnlPrimaryVolumeDescriptor.Size = new System.Drawing.Size(610, 396);
+            this.pnlPrimaryVolumeDescriptor.Size = new System.Drawing.Size(610, 346);
             this.pnlPrimaryVolumeDescriptor.TabIndex = 1;
             // 
             // frmReader
@@ -257,7 +257,7 @@ namespace Playdia
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.TreeView tvSectors;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private System.Windows.Forms.Panel pnlSector;
+        private System.Windows.Forms.Panel pnlDirectoryRecord;
         private System.Windows.Forms.Panel pnlPrimaryVolumeDescriptor;
     }
 }

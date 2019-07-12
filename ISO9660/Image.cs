@@ -10,8 +10,9 @@ namespace ISO9660
     public class Image
     {
         private int intNbSectors;
-        private FileStream fs;
+        private ImageStream fs;
         private List<VolumeDescriptor> volumeDescriptors;
+        private DirectoryRecord rootDirectory;
 
         public Image()
         {
@@ -22,15 +23,19 @@ namespace ISO9660
 
         public Image(string path) : this()
         {
-            fs = new FileStream(path, FileMode.Open);
+            fs = new ImageStream(path, FileMode.Open);
             intNbSectors = (int)(fs.Length / 2352);
             readVolumeDescriptors();
+            if(volumeDescriptors.Count > 1)
+            {
+                readDirectoryRecord((int)rootDirectory.ExtentLocation);
+            }
             fs.Close();
         }
 
         public XASectorForm1 this[int index]
         {
-            get { return ReadSector(index); }
+            get { return fs.ReadXA1Sector(index); }
         }
 
         public int NbSectors
@@ -43,39 +48,77 @@ namespace ISO9660
             get { return volumeDescriptors; }
         }
 
-        private XASectorForm1 ReadSector(int index)
+        public DirectoryRecord RootDirectory
         {
-            byte[] buffer = new byte[2352];
-            XASectorForm1 sector = new XASectorForm1();
-            fs.Seek(index * 2352, SeekOrigin.Begin);
-            fs.Read(buffer, 0, 2352);
-            sector.ReadBytes(buffer);
-            return sector;
+            get { return rootDirectory; }
         }
+
 
         private void readVolumeDescriptors()
         {
             XASectorForm1 sector;
             VolumeDescriptor vd;
             int sectorId = 16;
-            sector = ReadSector(sectorId);
+            sector = fs.ReadXA1Sector(sectorId);
             vd = new VolumeDescriptor(sector.Data);
-            while(vd.VolumeDescriptorType!= SectorType.VolumeDescriptionSetTerminator)
+            while(vd.VolumeDescriptorType!= VolumeDescriptorType.VolumeDescriptionSetTerminator && sectorId < intNbSectors)
             {
-                switch(vd.VolumeDescriptorType)
+                if (vd.StandardIdentifier == "CD001") //valid volume descriptor
                 {
-                    case SectorType.PrimaryVolumeDescriptor:
-                        PrimaryVolumeDescriptor pvd = new PrimaryVolumeDescriptor(sector.Data);
-                        volumeDescriptors.Add(pvd);
-                        break;
-                    default:
-                        break;
+                    switch (vd.VolumeDescriptorType)
+                    {
+                        case VolumeDescriptorType.PrimaryVolumeDescriptor:
+                            PrimaryVolumeDescriptor pvd = new PrimaryVolumeDescriptor(sector.Data);
+                            rootDirectory = pvd.RootDirectoryRecord;
+                            volumeDescriptors.Add(pvd);
+                            break;
+                        default:
+                            break;
+                    }
                 }
                 sectorId++;
-                sector = ReadSector(sectorId);
+                sector = fs.ReadXA1Sector(sectorId);
                 vd = new VolumeDescriptor(sector.Data);
             }
-            volumeDescriptors.Add(vd);
+            if(vd.StandardIdentifier=="CD001") //valid volume descriptor
+                volumeDescriptors.Add(vd);
+        }
+
+        private void readDirectoryRecord(int sectorId)
+        {
+            PrimaryVolumeDescriptor pvd = (PrimaryVolumeDescriptor)volumeDescriptors[0];
+            XASectorForm1 sector = fs.ReadXA1Sector(sectorId);
+            int offset = 0;
+            while(sector.Data[offset] !=0)
+            {
+                int size = sector.Data[offset];
+                byte[] data = new byte[size];
+                Array.Copy(sector.Data, offset, data, 0, size);
+                DirectoryRecord dr = new DirectoryRecord(data);
+                if (dr.FileIdentifierLength > 1)
+                    dr.FileIdentifier = Encoding.ASCII.GetString(data, 33, dr.FileIdentifierLength -2);
+                else
+                    switch(data[33])
+                    {
+                        case 0:
+                            dr.FileIdentifier = ".";
+                            break;
+                        case 1:
+                            dr.FileIdentifier = "..";
+                            break;
+                        default:
+                            dr.FileIdentifier = "";
+                            break;
+                    }
+                rootDirectory.Children.Add(dr);
+                offset += size;
+            }
+        }
+
+        private void ExtractDirectoryRecord(DirectoryRecord dr)
+        {
+            int startSector = 0;
+            int bytesRead = 0;
         }
     }
 }

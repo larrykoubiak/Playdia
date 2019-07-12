@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace ISO9660
@@ -62,13 +63,17 @@ namespace ISO9660
 	public class DirectoryRecord
 	{
         private _DirectoryRecord dr;
+        private List<DirectoryRecord> children;
+        private string fi;
         public DirectoryRecord()
 		{
             dr = new _DirectoryRecord();
-		}
-        public DirectoryRecord(_DirectoryRecord record)
+            children = new List<DirectoryRecord>();
+
+        }
+        public DirectoryRecord(byte[] data) : this()
         {
-            dr = record;
+            ReadBytes(data);
         }
         public byte Length
         {
@@ -139,10 +144,30 @@ namespace ISO9660
             get { return dr.LengthFI; }
             set { dr.LengthFI = value; }
         }
-        public _DirectoryRecord basestruct
+        public string FileIdentifier
         {
-            get { return dr; }
-            set { dr = value; }
+            get { return fi; }
+            set { fi = value; }
+        }
+        public List<DirectoryRecord> Children
+        {
+            get { return children; }
+        }
+        public void ReadBytes(byte[] data)
+        {
+            GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+            dr = (_DirectoryRecord)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(_DirectoryRecord));
+            handle.Free();
+        }
+        public byte[] GetBytes()
+        {
+            int size = Marshal.SizeOf(dr);
+            byte[] result = new byte[size];
+            IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(dr));
+            Marshal.StructureToPtr(dr, ptr, true);
+            Marshal.Copy(ptr, result, 0, size);
+            Marshal.FreeHGlobal(ptr);
+            return result;
         }
     }
 }

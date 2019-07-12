@@ -29,7 +29,7 @@ namespace PlaydiaControls
             txtVDType.Text = vd.VolumeDescriptorType.ToString();
             txtStandardIdentifier.Text = vd.StandardIdentifier;
             txtVDVersion.Text = vd.VolumeDescriptorVersion.ToString();
-            if(vd.VolumeDescriptorType==SectorType.PrimaryVolumeDescriptor)
+            if(vd.VolumeDescriptorType== VolumeDescriptorType.PrimaryVolumeDescriptor)
             {
                 PrimaryVolumeDescriptor pvd = (PrimaryVolumeDescriptor)vd;
                 gbPrimaryVolumeDescriptor.Visible = true;
@@ -52,17 +52,6 @@ namespace PlaydiaControls
                 txtLastModificationDate.Text = pvd.VolumeModificationdDate.ToString();
                 txtExpiryDate.Text = pvd.VolumeExpirationDate.ToString();
                 txtEffectiveDate.Text = pvd.VolumeEffectiveDate.ToString();
-                //Root direction info
-                txtDRLength.Text = pvd.RootDirectoryRecord.Length.ToString();
-                txtARLength.Text = pvd.RootDirectoryRecord.AttributeLength.ToString();
-                txtExtentLocation.Text = pvd.RootDirectoryRecord.ExtentLocation.ToString();
-                txtDataLength.Text = pvd.RootDirectoryRecord.DataLength.ToString();
-                txtRecordingDate.Text = pvd.RootDirectoryRecord.RecordingDate.ToString();
-                txtFileFlags.Text = pvd.RootDirectoryRecord.Flags.ToString();
-                txtFileUnitSize.Text = pvd.RootDirectoryRecord.FileUnitSize.ToString();
-                txtInterleaveGapSize.Text = pvd.RootDirectoryRecord.InterleaveGapSize.ToString();
-                txtVolumeSequenceNumber.Text = pvd.RootDirectoryRecord.VolumeSequenceNumber.ToString();
-                txtFileIdentifierLength.Text = pvd.RootDirectoryRecord.FileIdentifierLength.ToString();
             }
             else
             {

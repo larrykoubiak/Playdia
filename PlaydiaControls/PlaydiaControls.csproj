@@ -42,6 +42,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DirectoryRecordControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DirectoryRecordControl.Designer.cs">
+      <DependentUpon>DirectoryRecordControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="VolumeDescriptorControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -58,6 +64,9 @@
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="DirectoryRecordControl.resx">
+      <DependentUpon>DirectoryRecordControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="VolumeDescriptorControl.resx">
       <DependentUpon>VolumeDescriptorControl.cs</DependentUpon>
     </EmbeddedResource>

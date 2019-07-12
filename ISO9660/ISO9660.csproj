@@ -46,7 +46,9 @@
     <Compile Include="Structs\DirectoryRecord.cs" />
     <Compile Include="Structs\ISO9660Date.cs" />
     <Compile Include="Structs\PrimaryVolumeDescriptor.cs" />
-    <Compile Include="Structs\Sector.cs" />
+    <Compile Include="Structs\SectorHeader.cs" />
+    <Compile Include="Structs\XASectorForm2.cs" />
+    <Compile Include="Structs\XASectorForm1.cs" />
     <Compile Include="Structs\VolumeDescriptor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

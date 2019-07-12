@@ -15,7 +15,7 @@ namespace ISO9660
 	struct _PrimaryVolumeDescriptor
 	{
 		[MarshalAs(UnmanagedType.U1)]
-		public SectorType volumeDescriptorType;
+		public VolumeDescriptorType volumeDescriptorType;
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst=5)]
 		public char[] standardIdentifier;
 		[MarshalAs(UnmanagedType.U1)]
@@ -58,8 +58,8 @@ namespace ISO9660
 		public UInt32 locationPathTableBE;
 		[MarshalAs(UnmanagedType.U4)]
 		public UInt32 locationOptionalPathTableBE;
-		[MarshalAs(UnmanagedType.Struct,SizeConst =33)]
-		public _DirectoryRecord rootDirectoryRecord;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst=34)]
+		public byte[] rootDirectoryRecord;
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst=128)]
 		public char[] volumeSetIdentifier;		
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst=128)]
@@ -107,7 +107,7 @@ namespace ISO9660
             ReadByte(data);
         }
 
-        public override SectorType VolumeDescriptorType
+        public override VolumeDescriptorType VolumeDescriptorType
         {
             get { return pvd.volumeDescriptorType; }
             set { pvd.volumeDescriptorType = value; }
@@ -180,7 +180,7 @@ namespace ISO9660
         public DirectoryRecord RootDirectoryRecord
         {
             get { return new DirectoryRecord(pvd.rootDirectoryRecord); }
-            set { pvd.rootDirectoryRecord = value.basestruct; }
+            set { pvd.rootDirectoryRecord = value.GetBytes(); }
         }
 
 		public string VolumeSetIdentifier
