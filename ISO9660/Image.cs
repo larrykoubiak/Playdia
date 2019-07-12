@@ -115,10 +115,14 @@ namespace ISO9660
             }
         }
 
-        private void ExtractDirectoryRecord(DirectoryRecord dr)
+        public void ExtractDirectoryRecord(DirectoryRecord dr, string path)
         {
-            int startSector = 0;
-            int bytesRead = 0;
+            int size = (int)dr.DataLength;
+            byte[] buffer = new byte[size];
+            fs.Read(buffer, (int)dr.ExtentLocation, size);
+            FileStream ds = new FileStream(path, FileMode.Create);
+            ds.Write(buffer, 0, size);
+            ds.Close();
         }
     }
 }

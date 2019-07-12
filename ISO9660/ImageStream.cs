@@ -10,13 +10,13 @@ namespace ISO9660
 {
     class ImageStream : Stream
     {
-        private List<FileStream> _streams;
+        private List<Tuple<FileStream,SectorType>> _streams;
         private List<SectorHeader> _sectors;
         private long position;
 
         public ImageStream(string path, FileMode mode)
         {
-            _streams = new List<FileStream>();
+            _streams = new List<Tuple<FileStream, SectorType>>();
             _sectors = new List<SectorHeader>();
             if (path.EndsWith(".cue"))
             {
@@ -26,7 +26,21 @@ namespace ISO9660
                 MatchCollection matches = rgx.Matches(strCueSheet);
                 foreach (Match m in matches)
                 {
-                    _streams.Add(new FileStream(Path.Combine(directory,m.Groups[1].Value), mode));
+                    SectorType type;
+                    switch(m.Groups[4].Value)
+                    {
+                        case "2048":
+                            type = SectorType.XAForm1;
+                            break;
+                        case "2324":
+                            type = SectorType.XAForm2;
+                            break;
+                        default:
+                            type = SectorType.XAForm1;
+                            break;
+                    }
+                    _streams.Add(new Tuple<FileStream, SectorType>(
+                        new FileStream(Path.Combine(directory,m.Groups[1].Value), mode),type));
                 }
                 ReadSectors();
             }
@@ -36,9 +50,9 @@ namespace ISO9660
             get
             {
                 bool canread = true;
-                foreach (FileStream fs in _streams)
+                foreach (Tuple<FileStream, SectorType> fs in _streams)
                 {
-                    if (!fs.CanRead)
+                    if (!fs.Item1.CanRead)
                         canread = false;
                 }
                 return canread;
@@ -49,9 +63,9 @@ namespace ISO9660
             get
             {
                 bool canseek = true;
-                foreach (FileStream fs in _streams)
+                foreach (Tuple<FileStream, SectorType> fs in _streams)
                 {
-                    if (!fs.CanSeek)
+                    if (!fs.Item1.CanSeek)
                         canseek = false;
                 }
                 return canseek;
@@ -63,9 +77,9 @@ namespace ISO9660
         }
         public override void Flush()
         {
-            foreach (FileStream fs in _streams)
+            foreach (Tuple<FileStream, SectorType> fs in _streams)
             {
-                fs.Flush();
+                fs.Item1.Flush();
             }
         }
         public override long Length
@@ -73,9 +87,9 @@ namespace ISO9660
             get
             {
                 long length = 0;
-                foreach (FileStream fs in _streams)
+                foreach (Tuple<FileStream, SectorType> fs in _streams)
                 {
-                    length += fs.Length;
+                    length += fs.Item1.Length;
                 }
                 return length;
             }
@@ -115,6 +129,7 @@ namespace ISO9660
                 else
                 {
                     Array.Copy(data, 0, buffer, bytesread, (count-bytesread));
+                    bytesread += (count - bytesread);
                 }
             }
             return bytesread;
@@ -137,14 +152,15 @@ namespace ISO9660
             int filestreamid;
             for(filestreamid=0; filestreamid < _streams.Count; filestreamid++)
             {
-                FileStream fs = _streams[filestreamid];
+                FileStream fs = _streams[filestreamid].Item1;
+                SectorType type = _streams[filestreamid].Item2;
                 long index = 0;
                 while (index < fs.Length)
                 {
                     byte[] buffer = new byte[24];
                     fs.Seek(index, SeekOrigin.Begin);
                     fs.Read(buffer, 0, 24);
-                    SectorHeader sector = new SectorHeader(buffer, filestreamid, index, SectorType.XAForm1);
+                    SectorHeader sector = new SectorHeader(buffer, filestreamid, index, type);
                     _sectors.Add(sector);
                     index += 2352;
                 }
@@ -156,7 +172,7 @@ namespace ISO9660
             byte[] buffer = new byte[2352];
             SectorHeader header = _sectors[LBAIndex];
             XASectorForm1 sector = new XASectorForm1();
-            FileStream fs = _streams[header.FileStreamId];
+            FileStream fs = _streams[header.FileStreamId].Item1;
             fs.Seek(header.FileStreamOffset, SeekOrigin.Begin);
             fs.Read(buffer, 0, 2352);
             sector.ReadBytes(buffer);
@@ -168,7 +184,7 @@ namespace ISO9660
             byte[] buffer = new byte[2352];
             SectorHeader header = _sectors[LBAIndex];
             XASectorForm2 sector = new XASectorForm2();
-            FileStream fs = _streams[header.FileStreamId];
+            FileStream fs = _streams[header.FileStreamId].Item1;
             fs.Seek(header.FileStreamOffset, SeekOrigin.Begin);
             fs.Read(buffer, 0, 2352);
             sector.ReadBytes(buffer);

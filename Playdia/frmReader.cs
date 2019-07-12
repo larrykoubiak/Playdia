@@ -90,5 +90,19 @@ namespace Playdia
                 this.pnlDirectoryRecord.Controls.Add(drctl);
             }
         }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode node = this.tvSectors.SelectedNode;
+            if(node!=null && node.Parent.Name=="nodeDirectoryRecords")
+            {
+                DirectoryRecord dr = (DirectoryRecord)node.Tag;
+                saveFileDialog1.FileName = dr.FileIdentifier;
+                if(saveFileDialog1.ShowDialog()==DialogResult.OK)
+                {
+                    discimg.ExtractDirectoryRecord(dr, saveFileDialog1.FileName);
+                }
+            }
+        }
     }
 }

@@ -36,8 +36,8 @@ namespace Playdia
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("VolumeDescriptors");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("DirectoryRecords");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("VolumeDescriptors");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("DirectoryRecords");
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,6 +53,8 @@ namespace Playdia
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.pnlDirectoryRecord = new System.Windows.Forms.Panel();
             this.pnlPrimaryVolumeDescriptor = new System.Windows.Forms.Panel();
+            this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.pnlSectors.SuspendLayout();
@@ -65,7 +67,7 @@ namespace Playdia
             // 
             // openFileDialog1
             // 
-            this.openFileDialog1.FileName = "openFileDialog1";
+            this.openFileDialog1.Filter = "Cue sheets (*.cue)|*.cue";
             // 
             // menuStrip1
             // 
@@ -81,6 +83,7 @@ namespace Playdia
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openToolStripMenuItem,
+            this.saveAsToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -89,14 +92,14 @@ namespace Playdia
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItemClick);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "&Exit";
             // 
             // tableLayoutPanel1
@@ -177,13 +180,13 @@ namespace Playdia
             this.tvSectors.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tvSectors.Location = new System.Drawing.Point(0, 0);
             this.tvSectors.Name = "tvSectors";
-            treeNode1.Name = "nodeVolumeDescriptors";
-            treeNode1.Text = "VolumeDescriptors";
-            treeNode2.Name = "nodeDirectoryRecords";
-            treeNode2.Text = "DirectoryRecords";
+            treeNode3.Name = "nodeVolumeDescriptors";
+            treeNode3.Text = "VolumeDescriptors";
+            treeNode4.Name = "nodeDirectoryRecords";
+            treeNode4.Text = "DirectoryRecords";
             this.tvSectors.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode2});
+            treeNode3,
+            treeNode4});
             this.tvSectors.Size = new System.Drawing.Size(310, 492);
             this.tvSectors.TabIndex = 0;
             this.tvSectors.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvSectors_AfterSelect);
@@ -218,6 +221,13 @@ namespace Playdia
             this.pnlPrimaryVolumeDescriptor.Name = "pnlPrimaryVolumeDescriptor";
             this.pnlPrimaryVolumeDescriptor.Size = new System.Drawing.Size(610, 346);
             this.pnlPrimaryVolumeDescriptor.TabIndex = 1;
+            // 
+            // saveAsToolStripMenuItem
+            // 
+            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveAsToolStripMenuItem.Text = "&Save as..";
+            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // frmReader
             // 
@@ -259,5 +269,7 @@ namespace Playdia
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Panel pnlDirectoryRecord;
         private System.Windows.Forms.Panel pnlPrimaryVolumeDescriptor;
+        private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }
