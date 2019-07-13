@@ -173,8 +173,8 @@ namespace ISO9660
                         bw.Write((Int32)16);                        // size of chunk in bytes
                         bw.Write((Int16)1);                         // 1 - for PCM
                         bw.Write((Int16)1);                         // only Stereo files in this version
-                        bw.Write((Int32)18900);          // sample rate per second (usually 44100)
-                        bw.Write((Int32)(2 * 18900));    // bytes per second (usually 176400)
+                        bw.Write((Int32)44100);          // sample rate per second (usually 44100)
+                        bw.Write((Int32)(2 * 44100));    // bytes per second (usually 176400)
                         bw.Write((Int16)2);                         // data align 4 bytes (2 bytes sample stereo)
                         bw.Write((Int16)16);                        // only 16-bit in this version
                                                                     // chunk 2:
