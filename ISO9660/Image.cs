@@ -127,43 +127,73 @@ namespace ISO9660
 
         public string SectorStats()
         {
-            string message = "";
-            string prev_subheaderhex = "";
-            long startoffset = 0;
-            int counter = 0;
+            Dictionary<string, int> stats = new Dictionary<string, int>();
             foreach (SectorHeader s in fs.Sectors)
             {
-                if (s.SubHeader1.ToString("X8") == prev_subheaderhex)
-                {
-                    counter++;
-                }
+                string subheaderhex = s.SubHeader1.ToString("X8");
+                if (stats.ContainsKey(subheaderhex))
+                    stats[subheaderhex]++;
                 else
-                {
-                    if (prev_subheaderhex != "")
-                    {
-                        message += startoffset.ToString("X8") + ";" + prev_subheaderhex + ";" + counter.ToString() + "\r\n";
-                    }
-                    prev_subheaderhex = s.SubHeader1.ToString("X8");
-                    startoffset = s.FileStreamOffset;
-                    counter = 1;
-                }
+                    stats.Add(subheaderhex, 1);
+            }
+            string message = "";
+            foreach (KeyValuePair<string, int> stat in stats)
+            {
+                message += stat.Key + " : " + stat.Value.ToString() + "\r\n";
             }
             return message;
-            //Dictionary<string, int> stats = new Dictionary<string, int>();
-            //foreach (SectorHeader s in fs.Sectors)
-            //{
-            //    string subheaderhex = s.SubHeader1.ToString("X8");
-            //    if (stats.ContainsKey(subheaderhex))
-            //        stats[subheaderhex]++;
-            //    else
-            //        stats.Add(subheaderhex, 1);
-            //}
-            //string message = "";
-            //foreach (KeyValuePair<string, int> stat in stats)
-            //{
-            //    message += stat.Key + " : " + stat.Value.ToString() + "\r\n";
-            //}
-            //return message;
+        }
+        public void ExtractAudio(DirectoryRecord dr, string path)
+        {
+            int sectorId = (int)dr.ExtentLocation;
+            int filecounter = 0;
+            List<Int16> pcms = new List<Int16>();
+            SectorHeader sh = fs.Sectors[sectorId];
+            while ((sh.Submode & Submodes.EOF)==0)
+            {
+                if((sh.Submode & Submodes.Audio) > 0)
+                {
+                    XASectorForm2 s = fs.ReadXA2Sector(sectorId); 
+                    for(int sg=0; sg<18; sg++)
+                    {
+                        byte[] data = new byte[128];
+                        Array.Copy(s.Data, sg * 128, data, 0, 128);
+                        ADPCMBlock block = new ADPCMBlock(data);
+                        pcms.AddRange(block.getPCM());
+                    }
+                    if ((sh.Submode & Submodes.EOR) > 0)
+                    {
+                        FileStream f = new FileStream(Path.Combine(path, "track" + filecounter.ToString("00") + ".wav"), FileMode.Create);
+                        BinaryWriter bw = new BinaryWriter(f);
+                        bw.Write(Encoding.ASCII.GetBytes("RIFF"));  // "RIFF"
+                        bw.Write((Int32)(pcms.Count * 2) + 44);                  // size of entire file with 16-bit data
+                        bw.Write(Encoding.ASCII.GetBytes("WAVE"));  // "WAVE"
+                                                                    // chunk 1:
+                        bw.Write(Encoding.ASCII.GetBytes("fmt "));  // "fmt "
+                        bw.Write((Int32)16);                        // size of chunk in bytes
+                        bw.Write((Int16)1);                         // 1 - for PCM
+                        bw.Write((Int16)1);                         // only Stereo files in this version
+                        bw.Write((Int32)18900);          // sample rate per second (usually 44100)
+                        bw.Write((Int32)(2 * 18900));    // bytes per second (usually 176400)
+                        bw.Write((Int16)2);                         // data align 4 bytes (2 bytes sample stereo)
+                        bw.Write((Int16)16);                        // only 16-bit in this version
+                                                                    // chunk 2:
+                        bw.Write(Encoding.ASCII.GetBytes("data"));  // "data"
+                        bw.Write((Int32)(pcms.Count * 2));   // size of audio data 16-bit
+                        foreach (Int16 pcm in pcms)
+                        {
+                            bw.Write(pcm);
+                        }
+                        bw.Flush();
+                        bw.Close();
+                        f.Close();
+                        pcms = new List<Int16>();
+                        filecounter++;
+                    }
+                }
+                sectorId++;
+                sh = fs.Sectors[sectorId];
+            }
         }
     }
 }

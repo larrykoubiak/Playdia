@@ -36,25 +36,27 @@ namespace Playdia
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("VolumeDescriptors");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("DirectoryRecords");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("VolumeDescriptors");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("DirectoryRecords");
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sectorStatsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.pnlSectors = new System.Windows.Forms.Panel();
+            this.txtSectorStats = new System.Windows.Forms.TextBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tvSectors = new System.Windows.Forms.TreeView();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.pnlDirectoryRecord = new System.Windows.Forms.Panel();
             this.pnlPrimaryVolumeDescriptor = new System.Windows.Forms.Panel();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.sectorStatsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.txtSectorStats = new System.Windows.Forms.TextBox();
+            this.extraAudioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.pnlSectors.SuspendLayout();
@@ -84,6 +86,7 @@ namespace Playdia
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openToolStripMenuItem,
+            this.extraAudioToolStripMenuItem,
             this.saveAsToolStripMenuItem,
             this.sectorStatsToolStripMenuItem,
             this.exitToolStripMenuItem});
@@ -105,11 +108,24 @@ namespace Playdia
             this.saveAsToolStripMenuItem.Text = "&Save as..";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
+            // sectorStatsToolStripMenuItem
+            // 
+            this.sectorStatsToolStripMenuItem.Name = "sectorStatsToolStripMenuItem";
+            this.sectorStatsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sectorStatsToolStripMenuItem.Text = "Sect&or Stats";
+            this.sectorStatsToolStripMenuItem.Click += new System.EventHandler(this.sectorStatsToolStripMenuItem_Click);
+            // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "&Exit";
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(19, 20);
+            this.toolStripMenuItem1.Text = "&";
             // 
             // tableLayoutPanel1
             // 
@@ -135,6 +151,15 @@ namespace Playdia
             this.pnlSectors.Size = new System.Drawing.Size(930, 194);
             this.pnlSectors.TabIndex = 0;
             // 
+            // txtSectorStats
+            // 
+            this.txtSectorStats.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSectorStats.Location = new System.Drawing.Point(0, 0);
+            this.txtSectorStats.Multiline = true;
+            this.txtSectorStats.Name = "txtSectorStats";
+            this.txtSectorStats.Size = new System.Drawing.Size(930, 194);
+            this.txtSectorStats.TabIndex = 0;
+            // 
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -157,13 +182,13 @@ namespace Playdia
             this.tvSectors.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tvSectors.Location = new System.Drawing.Point(0, 0);
             this.tvSectors.Name = "tvSectors";
-            treeNode1.Name = "nodeVolumeDescriptors";
-            treeNode1.Text = "VolumeDescriptors";
-            treeNode2.Name = "nodeDirectoryRecords";
-            treeNode2.Text = "DirectoryRecords";
+            treeNode3.Name = "nodeVolumeDescriptors";
+            treeNode3.Text = "VolumeDescriptors";
+            treeNode4.Name = "nodeDirectoryRecords";
+            treeNode4.Text = "DirectoryRecords";
             this.tvSectors.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode2});
+            treeNode3,
+            treeNode4});
             this.tvSectors.Size = new System.Drawing.Size(310, 322);
             this.tvSectors.TabIndex = 0;
             this.tvSectors.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvSectors_AfterSelect);
@@ -199,27 +224,12 @@ namespace Playdia
             this.pnlPrimaryVolumeDescriptor.Size = new System.Drawing.Size(610, 176);
             this.pnlPrimaryVolumeDescriptor.TabIndex = 1;
             // 
-            // toolStripMenuItem1
+            // extraAudioToolStripMenuItem
             // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(19, 20);
-            this.toolStripMenuItem1.Text = "&";
-            // 
-            // sectorStatsToolStripMenuItem
-            // 
-            this.sectorStatsToolStripMenuItem.Name = "sectorStatsToolStripMenuItem";
-            this.sectorStatsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.sectorStatsToolStripMenuItem.Text = "Sect&or Stats";
-            this.sectorStatsToolStripMenuItem.Click += new System.EventHandler(this.sectorStatsToolStripMenuItem_Click);
-            // 
-            // txtSectorStats
-            // 
-            this.txtSectorStats.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtSectorStats.Location = new System.Drawing.Point(0, 0);
-            this.txtSectorStats.Multiline = true;
-            this.txtSectorStats.Name = "txtSectorStats";
-            this.txtSectorStats.Size = new System.Drawing.Size(930, 194);
-            this.txtSectorStats.TabIndex = 0;
+            this.extraAudioToolStripMenuItem.Name = "extraAudioToolStripMenuItem";
+            this.extraAudioToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.extraAudioToolStripMenuItem.Text = "Extra &Audio";
+            this.extraAudioToolStripMenuItem.Click += new System.EventHandler(this.extraAudioToolStripMenuItem_Click);
             // 
             // frmReader
             // 
@@ -263,5 +273,7 @@ namespace Playdia
         private System.Windows.Forms.ToolStripMenuItem sectorStatsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.TextBox txtSectorStats;
+        private System.Windows.Forms.ToolStripMenuItem extraAudioToolStripMenuItem;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
     }
 }

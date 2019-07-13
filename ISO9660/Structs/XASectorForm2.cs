@@ -71,6 +71,22 @@ namespace ISO9660
             get { return _sector.subheader[1]; }
             set { _sector.subheader[1] = value; }
         }
+        public byte FileNumber
+        {
+            get { return (byte)((_sector.subheader[0] & 0xFF000000) >> 24); }
+        }
+        public byte Channel
+        {
+            get { return (byte)((_sector.subheader[0] & 0x00FF0000) >> 16); }
+        }
+        public Submodes Submode
+        {
+            get { return (Submodes)((_sector.subheader[0] & 0x0000FF00) >> 8); }
+        }
+        public byte Coding
+        {
+            get { return (byte)((_sector.subheader[0] & 0x000000FF)); }
+        }
         public byte[] Data
         {
             get { return _sector.data; }

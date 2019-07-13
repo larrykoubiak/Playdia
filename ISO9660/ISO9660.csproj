@@ -43,6 +43,7 @@
     <Compile Include="Image.cs" />
     <Compile Include="ImageStream.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Structs\ADPCMBlock.cs" />
     <Compile Include="Structs\DirectoryRecord.cs" />
     <Compile Include="Structs\ISO9660Date.cs" />
     <Compile Include="Structs\PrimaryVolumeDescriptor.cs" />
