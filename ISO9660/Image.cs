@@ -124,5 +124,46 @@ namespace ISO9660
             ds.Write(buffer, 0, size);
             ds.Close();
         }
+
+        public string SectorStats()
+        {
+            string message = "";
+            string prev_subheaderhex = "";
+            long startoffset = 0;
+            int counter = 0;
+            foreach (SectorHeader s in fs.Sectors)
+            {
+                if (s.SubHeader1.ToString("X8") == prev_subheaderhex)
+                {
+                    counter++;
+                }
+                else
+                {
+                    if (prev_subheaderhex != "")
+                    {
+                        message += startoffset.ToString("X8") + ";" + prev_subheaderhex + ";" + counter.ToString() + "\r\n";
+                    }
+                    prev_subheaderhex = s.SubHeader1.ToString("X8");
+                    startoffset = s.FileStreamOffset;
+                    counter = 1;
+                }
+            }
+            return message;
+            //Dictionary<string, int> stats = new Dictionary<string, int>();
+            //foreach (SectorHeader s in fs.Sectors)
+            //{
+            //    string subheaderhex = s.SubHeader1.ToString("X8");
+            //    if (stats.ContainsKey(subheaderhex))
+            //        stats[subheaderhex]++;
+            //    else
+            //        stats.Add(subheaderhex, 1);
+            //}
+            //string message = "";
+            //foreach (KeyValuePair<string, int> stat in stats)
+            //{
+            //    message += stat.Key + " : " + stat.Value.ToString() + "\r\n";
+            //}
+            //return message;
+        }
     }
 }

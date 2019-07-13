@@ -36,25 +36,25 @@ namespace Playdia
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("VolumeDescriptors");
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("DirectoryRecords");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("VolumeDescriptors");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("DirectoryRecords");
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.pnlSectors = new System.Windows.Forms.Panel();
-            this.btnPrev = new System.Windows.Forms.Button();
-            this.label8 = new System.Windows.Forms.Label();
-            this.btnNext = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tvSectors = new System.Windows.Forms.TreeView();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.pnlDirectoryRecord = new System.Windows.Forms.Panel();
             this.pnlPrimaryVolumeDescriptor = new System.Windows.Forms.Panel();
-            this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.sectorStatsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.txtSectorStats = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.pnlSectors.SuspendLayout();
@@ -72,7 +72,8 @@ namespace Playdia
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.toolStripMenuItem1});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(936, 24);
@@ -84,6 +85,7 @@ namespace Playdia
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openToolStripMenuItem,
             this.saveAsToolStripMenuItem,
+            this.sectorStatsToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -96,6 +98,13 @@ namespace Playdia
             this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItemClick);
             // 
+            // saveAsToolStripMenuItem
+            // 
+            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveAsToolStripMenuItem.Text = "&Save as..";
+            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
+            // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
@@ -106,7 +115,6 @@ namespace Playdia
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Controls.Add(this.pnlSectors, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.splitContainer1, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -114,49 +122,18 @@ namespace Playdia
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 200F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(936, 528);
             this.tableLayoutPanel1.TabIndex = 24;
             // 
             // pnlSectors
             // 
-            this.pnlSectors.Controls.Add(this.btnPrev);
-            this.pnlSectors.Controls.Add(this.label8);
-            this.pnlSectors.Controls.Add(this.btnNext);
+            this.pnlSectors.Controls.Add(this.txtSectorStats);
             this.pnlSectors.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlSectors.Location = new System.Drawing.Point(3, 501);
+            this.pnlSectors.Location = new System.Drawing.Point(3, 331);
             this.pnlSectors.Name = "pnlSectors";
-            this.pnlSectors.Size = new System.Drawing.Size(930, 24);
+            this.pnlSectors.Size = new System.Drawing.Size(930, 194);
             this.pnlSectors.TabIndex = 0;
-            // 
-            // btnPrev
-            // 
-            this.btnPrev.Location = new System.Drawing.Point(3, -3);
-            this.btnPrev.Name = "btnPrev";
-            this.btnPrev.Size = new System.Drawing.Size(21, 24);
-            this.btnPrev.TabIndex = 18;
-            this.btnPrev.Text = "<";
-            this.btnPrev.UseVisualStyleBackColor = true;
-            this.btnPrev.Click += new System.EventHandler(this.btnPrev_Click);
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(75, 3);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(12, 13);
-            this.label8.TabIndex = 17;
-            this.label8.Text = "/";
-            // 
-            // btnNext
-            // 
-            this.btnNext.Location = new System.Drawing.Point(143, -3);
-            this.btnNext.Name = "btnNext";
-            this.btnNext.Size = new System.Drawing.Size(21, 24);
-            this.btnNext.TabIndex = 19;
-            this.btnNext.Text = ">";
-            this.btnNext.UseVisualStyleBackColor = true;
-            this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
             // 
             // splitContainer1
             // 
@@ -171,7 +148,7 @@ namespace Playdia
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.tableLayoutPanel2);
-            this.splitContainer1.Size = new System.Drawing.Size(930, 492);
+            this.splitContainer1.Size = new System.Drawing.Size(930, 322);
             this.splitContainer1.SplitterDistance = 310;
             this.splitContainer1.TabIndex = 1;
             // 
@@ -180,14 +157,14 @@ namespace Playdia
             this.tvSectors.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tvSectors.Location = new System.Drawing.Point(0, 0);
             this.tvSectors.Name = "tvSectors";
-            treeNode3.Name = "nodeVolumeDescriptors";
-            treeNode3.Text = "VolumeDescriptors";
-            treeNode4.Name = "nodeDirectoryRecords";
-            treeNode4.Text = "DirectoryRecords";
+            treeNode1.Name = "nodeVolumeDescriptors";
+            treeNode1.Text = "VolumeDescriptors";
+            treeNode2.Name = "nodeDirectoryRecords";
+            treeNode2.Text = "DirectoryRecords";
             this.tvSectors.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode3,
-            treeNode4});
-            this.tvSectors.Size = new System.Drawing.Size(310, 492);
+            treeNode1,
+            treeNode2});
+            this.tvSectors.Size = new System.Drawing.Size(310, 322);
             this.tvSectors.TabIndex = 0;
             this.tvSectors.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvSectors_AfterSelect);
             // 
@@ -203,7 +180,7 @@ namespace Playdia
             this.tableLayoutPanel2.RowCount = 2;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 140F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(616, 492);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(616, 322);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // pnlDirectoryRecord
@@ -219,15 +196,30 @@ namespace Playdia
             this.pnlPrimaryVolumeDescriptor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlPrimaryVolumeDescriptor.Location = new System.Drawing.Point(3, 143);
             this.pnlPrimaryVolumeDescriptor.Name = "pnlPrimaryVolumeDescriptor";
-            this.pnlPrimaryVolumeDescriptor.Size = new System.Drawing.Size(610, 346);
+            this.pnlPrimaryVolumeDescriptor.Size = new System.Drawing.Size(610, 176);
             this.pnlPrimaryVolumeDescriptor.TabIndex = 1;
             // 
-            // saveAsToolStripMenuItem
+            // toolStripMenuItem1
             // 
-            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.saveAsToolStripMenuItem.Text = "&Save as..";
-            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(19, 20);
+            this.toolStripMenuItem1.Text = "&";
+            // 
+            // sectorStatsToolStripMenuItem
+            // 
+            this.sectorStatsToolStripMenuItem.Name = "sectorStatsToolStripMenuItem";
+            this.sectorStatsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sectorStatsToolStripMenuItem.Text = "Sect&or Stats";
+            this.sectorStatsToolStripMenuItem.Click += new System.EventHandler(this.sectorStatsToolStripMenuItem_Click);
+            // 
+            // txtSectorStats
+            // 
+            this.txtSectorStats.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSectorStats.Location = new System.Drawing.Point(0, 0);
+            this.txtSectorStats.Multiline = true;
+            this.txtSectorStats.Name = "txtSectorStats";
+            this.txtSectorStats.Size = new System.Drawing.Size(930, 194);
+            this.txtSectorStats.TabIndex = 0;
             // 
             // frmReader
             // 
@@ -261,9 +253,6 @@ namespace Playdia
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel pnlSectors;
-        private System.Windows.Forms.Button btnPrev;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.TreeView tvSectors;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
@@ -271,5 +260,8 @@ namespace Playdia
         private System.Windows.Forms.Panel pnlPrimaryVolumeDescriptor;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.ToolStripMenuItem sectorStatsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.TextBox txtSectorStats;
     }
 }

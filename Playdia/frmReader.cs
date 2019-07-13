@@ -70,6 +70,7 @@ namespace Playdia
                     TreeNode node = drNode.Nodes.Add(dr.FileIdentifier);
                     node.Tag = dr;
                 }
+                this.txtSectorStats.Text = discimg.SectorStats();
             }
         }
 
@@ -82,7 +83,7 @@ namespace Playdia
                 VolumeDescriptorControl pvdctl = new VolumeDescriptorControl(vd);
                 this.pnlPrimaryVolumeDescriptor.Controls.Add(pvdctl);
             }
-            else
+            else if(e.Node.Parent!=null && e.Node.Parent.Name=="nodeDirectoryRecords")
             {
                 this.pnlDirectoryRecord.Controls.Clear();
                 DirectoryRecord dr = (DirectoryRecord)e.Node.Tag;
@@ -103,6 +104,11 @@ namespace Playdia
                     discimg.ExtractDirectoryRecord(dr, saveFileDialog1.FileName);
                 }
             }
+        }
+
+        private void sectorStatsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(discimg.SectorStats());
         }
     }
 }

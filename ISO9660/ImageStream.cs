@@ -105,6 +105,10 @@ namespace ISO9660
                 position = value;
             }
         }
+        public List<SectorHeader> Sectors
+        {
+            get { return _sectors; }
+        }
         public override int Read(byte[] buffer, int LBAOffset, int count)
         {
             int bytesread = 0;
