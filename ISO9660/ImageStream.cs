@@ -117,12 +117,10 @@ namespace ISO9660
             {
                 byte[] data;
                 int datalength;
-                if (_sectors[lba].SectorType == SectorType.XAForm1)
+                if ((_sectors[lba].Submode & Submodes.Form)==0)
                     data = ReadXA1Sector(lba).Data;
-                else if (_sectors[lba].SectorType == SectorType.XAForm2)
-                    data = ReadXA2Sector(lba).Data;
                 else
-                    data = null;
+                    data = ReadXA2Sector(lba).Data;
                 datalength = data.Length;
                 if((count - bytesread) > datalength)
                 {

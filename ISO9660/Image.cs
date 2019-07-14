@@ -147,8 +147,11 @@ namespace ISO9660
         {
             int sectorId = (int)dr.ExtentLocation;
             int filecounter = 0;
+            Int32 prev1, prev2;
             List<Int16> pcms = new List<Int16>();
             SectorHeader sh = fs.Sectors[sectorId];
+            prev1 = 0;
+            prev2 = 0;
             while ((sh.Submode & Submodes.EOF)==0)
             {
                 if((sh.Submode & Submodes.Audio) > 0)
@@ -159,14 +162,14 @@ namespace ISO9660
                         byte[] data = new byte[128];
                         Array.Copy(s.Data, sg * 128, data, 0, 128);
                         ADPCMBlock block = new ADPCMBlock(data);
-                        pcms.AddRange(block.getPCM());
+                        pcms.AddRange(block.getPCM(ref prev1, ref prev2));
                     }
                     if ((sh.Submode & Submodes.EOR) > 0)
                     {
                         FileStream f = new FileStream(Path.Combine(path, "track" + filecounter.ToString("00") + ".wav"), FileMode.Create);
                         BinaryWriter bw = new BinaryWriter(f);
                         bw.Write(Encoding.ASCII.GetBytes("RIFF"));  // "RIFF"
-                        bw.Write((Int32)(pcms.Count * 2) + 44);                  // size of entire file with 16-bit data
+                        bw.Write((Int32)(pcms.Count * 2) + 36);                  // size of entire file with 16-bit data
                         bw.Write(Encoding.ASCII.GetBytes("WAVE"));  // "WAVE"
                                                                     // chunk 1:
                         bw.Write(Encoding.ASCII.GetBytes("fmt "));  // "fmt "
@@ -188,6 +191,8 @@ namespace ISO9660
                         bw.Close();
                         f.Close();
                         pcms = new List<Int16>();
+                        prev1 = 0;
+                        prev2 = 0;
                         filecounter++;
                     }
                 }

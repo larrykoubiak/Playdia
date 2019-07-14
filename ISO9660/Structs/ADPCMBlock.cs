@@ -28,22 +28,19 @@ namespace ISO9660
         {
             ReadBytes(data);
         }
-        public List<Int16> getPCM()
+        public List<Int16> getPCM(ref Int32 prev1, ref Int32 prev2)
         {
             List<Int16> pcms = new List<Int16>();
-            Int32 prev1, prev2;
-            prev1 = 0;
-            prev2 = 0;
             for (int blk = 0; blk < 4; blk++)
                 {
                 for (int nibble = 0; nibble < 2; nibble++)
                 {
                     for (int sd = 0; sd < 28; sd++)
                     {
-                        int shift = _block.soundParameters[(blk * 2) + nibble] & 0xF;
+                        int shift = _block.soundParameters[4 + (blk * 2) + nibble] & 0xF;
                         if (shift > 12)
                             shift = 9;
-                        int filter = (_block.soundParameters[(blk * 2) + nibble] & 0x30) >> 4;
+                        int filter = (_block.soundParameters[4 + (blk * 2) + nibble] & 0x30) >> 4;
                         int f0 = -K0[filter];
                         int f1 = -K1[filter];
                         int idx = ((sd * 4)+ blk);
