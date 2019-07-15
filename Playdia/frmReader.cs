@@ -111,7 +111,7 @@ namespace Playdia
             MessageBox.Show(discimg.SectorStats());
         }
 
-        private void extraAudioToolStripMenuItem_Click(object sender, EventArgs e)
+        private void extractAudioToolStripMenuItem_Click(object sender, EventArgs e)
         {
             TreeNode node = this.tvSectors.SelectedNode;
             if (node != null && node.Parent.Name == "nodeDirectoryRecords")
@@ -121,6 +121,20 @@ namespace Playdia
                 if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
                 {
                     discimg.ExtractAudio(dr, folderBrowserDialog1.SelectedPath);
+                }
+            }
+        }
+
+        private void extractVideoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode node = this.tvSectors.SelectedNode;
+            if (node != null && node.Parent.Name == "nodeDirectoryRecords")
+            {
+                DirectoryRecord dr = (DirectoryRecord)node.Tag;
+                folderBrowserDialog1.SelectedPath = "C:\\Temp";
+                if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    discimg.ExtractVideo(dr, folderBrowserDialog1.SelectedPath);
                 }
             }
         }

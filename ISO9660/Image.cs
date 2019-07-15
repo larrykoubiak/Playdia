@@ -143,6 +143,30 @@ namespace ISO9660
             }
             return message;
         }
+        public void ExtractVideo(DirectoryRecord dr, string path)
+        {
+            int sectorId = (int)dr.ExtentLocation;
+            int filecounter = 0;
+            List<byte> bytes= new List<byte>();
+            SectorHeader sh = fs.Sectors[sectorId];
+            while ((sh.Submode & Submodes.EOF) == 0)
+            {
+                if ((sh.Submode & Submodes.Audio) == 0)
+                {
+                    XASectorForm1 s = fs.ReadXA1Sector(sectorId);
+                    bytes.AddRange(s.Data);
+                    if ((sh.Submode & Submodes.EOR) > 0)
+                    {
+                        FileStream f = new FileStream(Path.Combine(path, "track" + filecounter.ToString("00") + ".str"), FileMode.Create);
+                        f.Write(bytes.ToArray(), 0, bytes.Count);
+                        bytes = new List<byte>();
+                        filecounter++;
+                    }
+                }
+                sectorId++;
+                sh = fs.Sectors[sectorId];
+            }
+        }
         public void ExtractAudio(DirectoryRecord dr, string path)
         {
             int sectorId = (int)dr.ExtentLocation;
